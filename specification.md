@@ -14,10 +14,12 @@ this spec.
 
 * OpenTelemetry collector can be used as a drop-in replacement
   for Prometheus server to scrape and export metrics data.
-* OpenTelemetry collector should export OLTP-compatible Prometheus
+* OpenTelemetry collector should export OTLP-compatible Prometheus
   time series to OpenTelemetry metrics exporters.
 * OpenTelemetry libraries should implement exporters to publish
   Prometheus metrics.
+* To the OpenTelemetry collector, an OpenTelemetry target and
+  a Prometheus instrumented target is indistinguishable.
 
 ## Differences and Limitations
 
@@ -65,9 +67,9 @@ the collector and the libraries.
   options in the Prometheus server. Collector will ignore the
   alerting rules.
 * Collector will support exporting cumulative series to
-  OLTP-compatible exporters.
-* Collector will produce an “up” metric as a gauge that is compatible
-  with the Prometheus server “up” metric. If scrape succeeds,
+  OTLP-compatible exporters.
+* Collector will produce an "up" metric as a gauge that is compatible
+  with the Prometheus server "up" metric. If scrape succeeds,
   it will produce 1 and 0 if it fails.
 * Collector will produce "instance" and "job" labels similar
   to the Prometheus server.
@@ -77,7 +79,8 @@ the collector and the libraries.
   might be in place in the scraped data. Collector may decorate
   the samples with some semantic convention attributes available
   in the collector.
-* Collector will support WAL if it has access to persistent storage.
+* Collector will support Promeheus WAL if it has access
+  to persistent storage.
 * Collector will provide remote write fine tuning options similar
   to Prometheus server.
 

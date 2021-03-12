@@ -68,9 +68,9 @@ the collector and the libraries.
   alerting rules.
 * Collector will support exporting cumulative series to
   OTLP-compatible exporters.
-* Collector will produce an "up" metric as a gauge that is compatible
-  with the Prometheus server "up" metric. If scrape succeeds,
-  it will produce 1 and 0 if it fails.
+* At each scrape, collector will produce an "up" metric as a gauge
+  internally in the reciever and exporter will translate it to a
+  Prometheus up metric in the export time.
 * Collector will produce "instance" and "job" labels similar
   to the Prometheus server.
 * If a target disappears from the scrape, the collector will

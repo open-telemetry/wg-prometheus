@@ -34,35 +34,32 @@ details. This section summarizes a few key differences.
   collector.
 * **Cumulative vs delta**: OpenTelemetry supports delta temporality
   whereas Prometheus always expects absolute/cumulative values. This
-  breaks some components that produce and communicate deltas where
-  cumulatives cannot be rebuilt before being exported to Prometheus.
+  may result in deltas (collected by OTel client libraries) not being
+  able to exported to Prometheus, but Prometheus instrumented metrics
+  will be fully supported because they are cumulative.
 * **Histogram boundaries**: Prometheus histogram boundaries are by
   lower equal (le) while OpenTelemetry histogram boundaries are
-  greater equal (ge). (This difference will be resolved via #18)
+  greater equal (ge). This soon will be fixed by
+  [opentelemetry-proto#262](https://github.com/open-telemetry/opentelemetry-proto/pull/262).
 * **Semantic conventions**: OpenTelemetry predefines semantic
   conventions to collect additional metadata with telemetry data.
   Prometheus users don’t follow the same conventions and Prometheus
   client library provided data may lack the semantic conventions
   available in OpenTelemetry libraries.
 
-## Compatibility Requirements
-
-Given the number of fundamental design goals between OpenTelemetry
-and Prometheus, our aim is to close the gaps where possible and
-make the right compromises to meet the goals defined in this document.
-OpenTelemery and Prometheus won’t be fully compatible but we will
-enable important use cases to enable OpenTelemetry for Prometheus
-users. The following sections summarizes the expectations from
-the collector and the libraries.
+## Implementation Requirements
 
 ### Collector
 
 * Collector will implement a Prometheus remote write exporter.
-  Publishing a pull-based metrics handler with all collected
-  metrics is not a scalable approach.
+  Collector is a common metrics sink in collection pipelines where
+  metric data points are recieved and quickly "forwarded" to exporters.
+  Implementing a pull-based metrics handler will require additional
+  design work in this model to be efficient, we may follow-up
+  with improvements to enable a metrics handler.
 * Collector will support scraping and ingesting cumulative metrics.
-  Prometheus doesn’t support deltas and there are cases where
-  rebuilding the cumulatives from deltas is not possible/easy.
+  Collector will not try to rebuild the cumulatives from deltas
+  at this moment but we may improve this case in the future.
 * Collector will support all discovery and scraping configuration
   options in the Prometheus server. Collector will ignore the
   alerting rules.
@@ -70,7 +67,9 @@ the collector and the libraries.
   OTLP-compatible exporters.
 * At each scrape, collector will produce an "up" metric as a gauge
   internally in the reciever and exporter will translate it to a
-  Prometheus up metric in the export time.
+  Prometheus up metric in the remote write exporter.
+  [opentelemetry-specification#1078](https://github.com/open-telemetry/opentelemetry-specification/issues/1078)
+  is going to address this issue at the data model in the future.
 * Collector will produce "instance" and "job" labels similar
   to the Prometheus server.
 * If a target disappears from the scrape, the collector will

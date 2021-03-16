@@ -29,9 +29,9 @@ details. This section summarizes a few key differences.
 
 * **Pull vs push**: Prometheus is mainly designed for pull
   whereas OpenTelemetry primarily is designed for push. This
-  difference causes how the state is maintained throughout the
-  collection including how it’s handled in the OpenTelemetry
-  collector.
+  difference changes how the state is maintained throughout the
+  collection pipeline, including how it’s handled in the
+  OpenTelemetry collector.
 * **Cumulative vs delta**: OpenTelemetry supports delta temporality
   whereas Prometheus always expects absolute/cumulative values. This
   may result in deltas (collected by OTel client libraries) not being

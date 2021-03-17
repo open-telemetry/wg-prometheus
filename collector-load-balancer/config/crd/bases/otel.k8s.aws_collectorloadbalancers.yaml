@@ -1,0 +1,84 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.5.0
+  creationTimestamp: null
+  name: collectorloadbalancers.otel.k8s.aws
+spec:
+  group: otel.k8s.aws
+  names:
+    kind: CollectorLoadBalancer
+    listKind: CollectorLoadBalancerList
+    plural: collectorloadbalancers
+    singular: collectorloadbalancer
+  scope: Namespaced
+  versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        description: CollectorLoadBalancer is the Schema for the collectorloadbalancers API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: CollectorLoadBalancerSpec defines the desired state of CollectorLoadBalancer
+            properties:
+              collectorConfig:
+                description: CollectorConfig is (the entire) otel collector config.
+                type: string
+              collectorImage:
+                description: CollectorImage specify which collector image to use
+                type: string
+              replicas:
+                description: 'Replicas specify the exact number of replicas. When set to 0, auto scale is enabled with a default max set to 10. FIXME: the line above is lying ... it just panic if you don''t enable scale directly'
+                format: int32
+                type: integer
+              scale:
+                description: When scale is enabled, Replicas is ignored
+                properties:
+                  enabled:
+                    type: boolean
+                  expected_targets_per_collector:
+                    type: integer
+                  max_replicas:
+                    type: integer
+                  min_replicas:
+                    type: integer
+                type: object
+            type: object
+          status:
+            description: CollectorLoadBalancerStatus defines the observed state of CollectorLoadBalancer
+            properties:
+              replicas:
+                format: int32
+                type: integer
+              selector:
+                description: 'TODO: what set it to the right string form TODO: so what does HPA look at? the replicas in status? and then update replicas in spec? https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/ seems deployment, sts etc. all works https://book.kubebuilder.io/reference/generating-crd.html#scale https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#scale-subresource https://medium.com/@thescott111/autoscaling-kubernetes-custom-resource-using-the-hpa-957d00bb7993'
+                type: string
+            required:
+            - selector
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      scale:
+        labelSelectorPath: .status.selector
+        specReplicasPath: .spec.replicas
+        statusReplicasPath: .status.replicas
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

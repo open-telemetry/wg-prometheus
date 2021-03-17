@@ -1,0 +1,20 @@
+syntax = "proto3";
+package clb;
+
+option go_package = "github.com/aws-observability/collector-load-balancer/proto/generated/clb/loadbalancer";
+
+import "clb.proto";
+
+service LoadBalancerService {
+  rpc GetTargets(GetPrometheusTargetsReq) returns (GetPrometheusTargetsRes);
+}
+
+message GetPrometheusTargetsReq {
+  // TODO: might use one off, can we also use UID?
+  string pod_ip = 1;
+  string pod_name = 2;
+}
+
+message GetPrometheusTargetsRes {
+  repeated otel.clb.PrometheusFileSD files = 1;
+}

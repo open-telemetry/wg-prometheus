@@ -1,0 +1,64 @@
+extensions:
+  clb_config_manager:
+    grpc:
+      endpoint: 0.0.0.0:8521
+    http:
+      endpoint: 0.0.0.0:8520
+    targets_base_dir: /etc/clb
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: localhost:4317
+      http:
+        endpoint: localhost:55681
+  prometheus:
+    config:
+      scrape_configs:
+      - job_name: static
+        static_configs:
+        - labels:
+            foo: bar
+          targets:
+          - localhost:8888
+      - file_sd_configs:
+        - files:
+          - /etc/clb/apps.json
+          refresh_interval: 1m
+        job_name: apps
+        relabel_configs:
+        - action: keep
+          regex: "true"
+          source_labels:
+          - __meta_kubernetes_pod_annotation_prometheus_io_scrape
+        - action: replace
+          regex: ([^:]+)(?::\d+)?;(\d+)
+          replacement: $$1:$$2
+          source_labels:
+          - __address__
+          - __meta_kubernetes_pod_annotation_prometheus_io_port
+          target_label: __address__
+        - action: replace
+          source_labels:
+          - __meta_kubernetes_namespace
+          target_label: kubernetes_namespace
+        - action: replace
+          source_labels:
+          - __meta_kubernetes_pod_name
+          target_label: kubernetes_pod_name
+processors:
+  batch:
+    timeout: 60s
+exporters:
+  awsemf:
+    dimension_rollup_option: NoDimensionRollup
+    log_group_name: CWAgentHackathon
+    namespace: AutoSharding
+service:
+  pipelines:
+    metrics:
+      exporters:
+      - awsemf
+      receivers:
+      - otlp
+      - prometheus

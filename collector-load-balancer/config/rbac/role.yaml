@@ -1,0 +1,132 @@
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - endpoints
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - nodes/metrics
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - daemonsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - statefulsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - otel.k8s.aws
+  resources:
+  - collectorloadbalancers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - otel.k8s.aws
+  resources:
+  - collectorloadbalancers/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - otel.k8s.aws
+  resources:
+  - collectorloadbalancers/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - otel.k8s.aws
+  resources:
+  - collectorloadgenerators
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - otel.k8s.aws
+  resources:
+  - collectorloadgenerators/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - otel.k8s.aws
+  resources:
+  - collectorloadgenerators/status
+  verbs:
+  - get
+  - patch
+  - update

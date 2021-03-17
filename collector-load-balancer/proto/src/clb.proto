@@ -1,0 +1,23 @@
+syntax = "proto3";
+package otel.clb;
+
+option go_package = "github.com/aws-observability/collector-load-balancer/proto/generated/clb";
+
+// ----------------------------------------------------------------------------
+// Prometheus Start
+
+// TargetSet is a list discovered prometheus target shares common labels.
+// The structure is a single item in file sd content.
+// Most time there is only one target in targets unless one container exports several different ports.
+message PrometheusTargetSet {
+  repeated string targets = 1 [json_name = "targets"];
+  map<string, string> labels = 2 [json_name = "labels"];
+}
+
+message PrometheusFileSD {
+  string location = 1; // output file for those targets
+  repeated PrometheusTargetSet targets = 2;
+}
+
+// Prometheus End
+// ----------------------------------------------------------------------------

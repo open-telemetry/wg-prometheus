@@ -1,0 +1,24 @@
+# permissions for end users to edit collectorloadgenerators.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: collectorloadgenerator-editor-role
+rules:
+- apiGroups:
+  - otel.k8s.aws
+  resources:
+  - collectorloadgenerators
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - otel.k8s.aws
+  resources:
+  - collectorloadgenerators/status
+  verbs:
+  - get

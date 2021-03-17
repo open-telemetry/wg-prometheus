@@ -1,0 +1,30 @@
+syntax = "proto3";
+package otel.clb.configmanager;
+
+option go_package = "github.com/aws-observability/collector-load-balancer/proto/generated/clb/configmanager";
+
+import "clb.proto";
+
+// ConfigManagerService runs as a collector extension or a sidecar of a collector.
+// It updates configuration at a shared path (e.g. prometheus file sd)
+// or triggers collector API to apply latest config without restarting the collector.
+service ConfigManagerService {
+  rpc UpdatePrometheusFileSD(UpdatePrometheusFileSDReq) returns (UpdatePrometheusFileSDRRes);
+  rpc GetPrometheusFileSD(GetPrometheusFileSDReq) returns (GetPrometheusFileSDRes);
+}
+
+message GetPrometheusFileSDReq {
+  repeated string files = 1; // name of files, empty will get all the files
+}
+
+message GetPrometheusFileSDRes {
+  repeated otel.clb.PrometheusFileSD files = 1;
+}
+
+message UpdatePrometheusFileSDReq {
+  repeated otel.clb.PrometheusFileSD files = 1; // There can be multiple fields because each job in prometheus config maps to one file
+}
+
+message UpdatePrometheusFileSDRRes {
+  int32 updated_files = 1; // Number of files written, could be smaller than requests if there are invalid file path.
+}

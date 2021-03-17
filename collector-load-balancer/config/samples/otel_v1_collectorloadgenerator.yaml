@@ -1,0 +1,7 @@
+apiVersion: otel.k8s.aws/v1
+kind: CollectorLoadGenerator
+metadata:
+  name: collectorloadgenerator-sample
+spec:
+  # Add fields here
+  foo: bar

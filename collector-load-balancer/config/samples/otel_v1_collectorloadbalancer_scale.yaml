@@ -1,0 +1,46 @@
+apiVersion: otel.k8s.aws/v1
+kind: CollectorLoadBalancer
+metadata:
+  name: collectorloadbalancer-sample-scale
+spec:
+  replicas: 2
+  scale:
+    enabled: true
+    expected_targets_per_collector: 3
+    min_replicas: 1
+    max_replicas: 10
+  collectorImage: localhost:5000/clbotelcol:0.1
+  collectorConfig: |
+    extensions:
+      clb_config_manager:
+        http:
+          endpoint: 0.0.0.0:8520
+        grpc:
+          endpoint: 0.0.0.0:8521
+        targets_base_dir: /etc/clb
+    receivers:
+      prometheus:
+        config:
+          scrape_configs:
+            - job_name: k8spods
+              relabel_configs:
+                - source_labels: [ __meta_kubernetes_pod_name ]
+                  regex: '^coredns.*$'
+                  action: drop
+              kubernetes_sd_configs:
+                - role: pod
+                  namespaces:
+                    names:
+                      - kube-system
+    processors:
+      batch:
+        timeout: 60s
+    exporters:
+      logging:
+    service:
+      extensions: [ clb_config_manager ]
+      pipelines:
+        metrics:
+          receivers: [ prometheus ]
+          processors: [ batch ]
+          exporters: [ logging ]

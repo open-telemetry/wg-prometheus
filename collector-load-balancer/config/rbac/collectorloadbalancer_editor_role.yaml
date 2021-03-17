@@ -1,0 +1,24 @@
+# permissions for end users to edit collectorloadbalancers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: collectorloadbalancer-editor-role
+rules:
+- apiGroups:
+  - otel.k8s.aws
+  resources:
+  - collectorloadbalancers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - otel.k8s.aws
+  resources:
+  - collectorloadbalancers/status
+  verbs:
+  - get

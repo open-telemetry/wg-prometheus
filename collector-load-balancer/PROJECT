@@ -1,0 +1,15 @@
+domain: k8s.aws
+layout: go.kubebuilder.io/v3
+projectName: collector-load-balancer
+repo: github.com/aws-observability/collector-load-balancer
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: k8s.aws
+  group: otel
+  kind: CollectorLoadGenerator
+  path: github.com/aws-observability/collector-load-balancer/api/v1
+  version: v1
+version: "3"

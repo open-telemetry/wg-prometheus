@@ -1,0 +1,9 @@
+type: google.api.Service
+config_version: 3
+http:
+  rules:
+    - selector: otel.clb.configmanager.ConfigManagerService.UpdatePrometheusFileSD
+      post: /v1/prometheus/targets
+      body: "*"
+    - selector: otel.clb.configmanager.ConfigManagerService.GetPrometheusFileSD
+      get: /v1/prometheus/targets/*

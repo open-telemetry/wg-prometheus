@@ -13,3 +13,8 @@ The working group is working on:
 
 The progress of the group can be tracked
 [here](https://github.com/open-telemetry/wg-prometheus/projects/1).
+
+Useful docs:
+* Meeting Notes for weekly meeting are [here](https://docs.google.com/document/d/19bnXziPn2MZ9wO6684UoI4D-LCjGL5bTJkGhux29bx8/edit#)
+* January 15 2021 Metrics Workshop notes: [Metrics workshop notes](https://docs.google.com/document/d/1RPSNg3H3HkHTmx9cWO25nJ9NIf2CCcl4Qg6LqFCF8RY/edit#)
+

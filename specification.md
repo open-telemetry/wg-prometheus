@@ -57,23 +57,16 @@ details. This section summarizes a few key differences.
   Implementing a pull-based metrics handler will require additional
   design work in this model to be efficient, we may follow-up
   with improvements to enable a metrics handler.
+
 * Collector will support scraping and ingesting cumulative metrics.
   Collector will not try to rebuild the cumulatives from deltas
   at this moment but we may improve this case in the future.
-* Collector will support all discovery and scraping configuration
+* Collector will support all global, discovery and scraping configuration
   options in the Prometheus server. Collector will ignore the
   alerting rules.
+* Collector MUST pass the [Prometheus Remote Write Compliance Tests](https://github.com/prometheus/compliance/tree/main/remote_write).
 * Collector will support exporting cumulative series to
   OTLP-compatible exporters.
-* At each scrape, collector will produce an "up" metric as a gauge
-  internally in the reciever and exporter will translate it to a
-  Prometheus up metric in the remote write exporter.
-  [opentelemetry-specification#1078](https://github.com/open-telemetry/opentelemetry-specification/issues/1078)
-  is going to address this issue at the data model in the future.
-* Collector will produce "instance" and "job" labels similar
-  to the Prometheus server.
-* If a target disappears from the scrape, the collector will
-  write explicit staleness markers for the respective timeseries.
 * Collector won’t assume any OpenTelemetry semantic conventions
   might be in place in the scraped data. Collector may decorate
   the samples with some semantic convention attributes available

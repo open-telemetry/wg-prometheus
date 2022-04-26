@@ -64,7 +64,7 @@ details. This section summarizes a few key differences.
 * Collector will support all global, discovery and scraping configuration
   options in the Prometheus server. Collector will ignore the
   alerting rules.
-* Collector MUST pass the [Prometheus Remote Write Compliance Tests](https://github.com/prometheus/compliance/tree/main/remote_write).
+* Collector MUST pass the [Prometheus Remote Write Sender Compliance Tests](https://github.com/prometheus/compliance/tree/main/remote_write_sender).
 * Collector will support exporting cumulative series to
   OTLP-compatible exporters.
 * Collector won’t assume any OpenTelemetry semantic conventions
